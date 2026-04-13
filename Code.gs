@@ -22,7 +22,7 @@
 // ─── Configuration ──────────────────────────────────────────────────────────────
 const CONFIG = {
   LOOK_AHEAD_DAYS: 14,
-  COMPANY_DOMAIN: "yourcompany.com",      // Change to your company's email domain
+  COMPANY_DOMAIN: "",                      // Your company email domain (e.g. "yourcompany.com"). Leave empty for personal Gmail.
   DRY_RUN: false,                          // Set to true to preview without applying
 
   // Emails of Google Groups or distribution lists in your org.
@@ -211,8 +211,10 @@ function checkIsFocusTime(event, advancedEvent) {
 
 /**
  * Checks if any guest has an email address outside the company domain.
+ * Returns false if no company domain is configured (personal calendar use).
  */
 function checkHasExternalGuests(guests) {
+  if (!CONFIG.COMPANY_DOMAIN) return false;
   return guests.some((guest) => {
     const email = guest.getEmail().toLowerCase();
     return !email.endsWith(`@${CONFIG.COMPANY_DOMAIN}`);

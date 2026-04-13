@@ -26,16 +26,58 @@ Rules are evaluated top-to-bottom. Focus time always wins.
 3. Enable the Calendar Advanced Service:
    - Click the **+** next to "Services" in the left sidebar
    - Select **Google Calendar API** (v3) and click **Add**
-4. Edit the `CONFIG` section at the top of the script:
-   - Set `COMPANY_DOMAIN` to your company's email domain
-   - Optionally add known group emails to `GROUP_EMAILS`
-   - Optionally add custom room patterns to `ROOM_EMAIL_PATTERNS`
+4. Edit the `CONFIG` section at the top of the script (see [Configuration](#configuration) below)
 5. Test it:
    - Set `DRY_RUN` to `true`
    - Select `updateMeetingColors` from the function dropdown and click **Run**
    - Check the execution log to see what would change
 6. When satisfied, set `DRY_RUN` back to `false`
 7. Run `createHourlyTrigger` once to set up automatic hourly execution
+
+## Configuration
+
+Edit the `CONFIG` object at the top of `Code.gs`:
+
+| Field | Required | Default | Description |
+|-------|----------|---------|-------------|
+| `COMPANY_DOMAIN` | No | `""` | Your company's email domain. Leave empty for personal Gmail — external meeting detection will be disabled. |
+| `LOOK_AHEAD_DAYS` | No | `14` | How many days ahead to scan for events. |
+| `DRY_RUN` | No | `false` | When `true`, logs what would change without actually updating colors. |
+| `GROUP_EMAILS` | No | `[]` | Known Google Group or distribution list emails. These count as 2+ attendees so group meetings are classified correctly. Leave empty if unsure. |
+| `ROOM_EMAIL_PATTERNS` | No | Google Workspace default | Email patterns for room/resource calendars, excluded from attendee counts. |
+
+### Example: Work calendar
+
+```js
+const CONFIG = {
+  LOOK_AHEAD_DAYS: 14,
+  COMPANY_DOMAIN: "yourcompany.com",
+  DRY_RUN: false,
+  GROUP_EMAILS: [
+    "engineering@yourcompany.com",
+    "design@yourcompany.com",
+  ],
+  ROOM_EMAIL_PATTERNS: [
+    "resource.calendar.google.com",
+  ],
+};
+```
+
+### Example: Personal Gmail
+
+```js
+const CONFIG = {
+  LOOK_AHEAD_DAYS: 14,
+  COMPANY_DOMAIN: "",    // No domain — external detection is disabled
+  DRY_RUN: false,
+  GROUP_EMAILS: [],
+  ROOM_EMAIL_PATTERNS: [
+    "resource.calendar.google.com",
+  ],
+};
+```
+
+> **Note:** Without a company domain, all meetings are classified purely by attendee count and recurrence. The "External" color will never be applied.
 
 ## Customizing colors
 
