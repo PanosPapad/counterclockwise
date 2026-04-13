@@ -1,6 +1,6 @@
 # Counterclockwise
 
-Auto-color your Google Calendar events by meeting type. A DIY replacement for Clockwise's color-coding feature (RIP).
+Auto-color your Google Calendar events by meeting type. A DIY replacement for [Clockwise's](https://getclockwise.com/) color-coding feature (RIP).
 
 ## What it does
 
